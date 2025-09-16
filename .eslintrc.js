@@ -1,3 +1,5 @@
+console.error("zach");
+
 module.exports = {
   env: {
     es2021: true,
@@ -19,5 +21,8 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  rules: {},
+  rules: {
+    "no-console": ["warn", { allow: ["error"] }],
+    "no-underscore-dangle": ["error", { allow: ["_id"] }],
+  },
 };
