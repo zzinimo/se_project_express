@@ -18,6 +18,10 @@ app.use((req, res, next) => {
 
 app.use("/", mainRouter);
 
+app.use((req, res) => {
+  res.status(404).send({ message: "Requested resource not found" });
+});
+
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
   .then(() => {

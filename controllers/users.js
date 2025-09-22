@@ -11,7 +11,7 @@ const getUsers = (req, res) => {
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.error(err);
-      return res.status(DEFAULT_ERROR).send({ message: err.message });
+      return res.status(DEFAULT_ERROR).send({ message: "Error getting users" });
     });
 };
 
@@ -24,7 +24,7 @@ const createUser = (req, res) => {
       if (err.name === "ValidationError") {
         return res.status(VALIDATION_ERROR).send({ message: err.message });
       }
-      return res.status(DEFAULT_ERROR).send({ message: err.message });
+      return res.status(DEFAULT_ERROR).send({ message: "Error creating user" });
     });
 };
 
@@ -43,7 +43,7 @@ const getUser = (req, res) => {
           .status(VALIDATION_ERROR)
           .send({ message: "Invalid user ID format" });
       }
-      return res.status(DEFAULT_ERROR).send({ message: err.message });
+      return res.status(DEFAULT_ERROR).send({ message: "Error getting users" });
     });
 };
 

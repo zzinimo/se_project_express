@@ -17,11 +17,12 @@ router.post("/", createItem);
 // read
 router.get("/", getItems);
 
-// update
-router.put("/:itemId", updateItem);
-
 // delete
 
 router.delete("/:itemId", deleteItem);
+
+//  Took out per reviewer request. Thank you
+// update
+// router.put("/:itemId", updateItem);
 
 module.exports = router;
