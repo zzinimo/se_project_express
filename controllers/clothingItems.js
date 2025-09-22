@@ -1,12 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
-const { create } = require("../models/user");
 
 const createItem = (req, res) => {
-  console.log("ZACH REQUEST BODY IS", req.body);
-
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
-  console.log("OWNER IS", owner);
 
   ClothingItem.create({
     name,
@@ -15,7 +11,6 @@ const createItem = (req, res) => {
     owner,
   })
     .then((item) => {
-      console.log("created item", item);
       res.status(201).send(item);
     })
     .catch((err) => {
@@ -24,7 +19,7 @@ const createItem = (req, res) => {
         return res.status(400).send({ message: err.message });
       }
       console.error("Error creating item:", err);
-      res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: err.message });
     });
 };
 
@@ -52,7 +47,6 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  console.log(itemId);
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
@@ -67,7 +61,7 @@ const deleteItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(404).json({ message: "Item not found" });
       }
-      res.status(500).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
     });
 };
 

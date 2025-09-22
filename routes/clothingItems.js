@@ -8,20 +8,19 @@ const {
 
 // Log method and path for all /items routes
 router.use((req, res, next) => {
-  console.log(`ZACH METHOD: ${req.method} PATH: ${req.originalUrl}`);
   next();
 });
 
-//create
+// create
 router.post("/", createItem);
 
-//read
+// read
 router.get("/", getItems);
 
-//update
+// update
 router.put("/:itemId", updateItem);
 
-//delete
+// delete
 
 router.delete("/:itemId", deleteItem);
 

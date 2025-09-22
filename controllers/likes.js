@@ -14,7 +14,7 @@ const likeItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(404).json({ message: "Item not found" });
       }
-      res.status(400).json({ message: err.message });
+      return res.status(400).json({ message: err.message });
     });
 };
 
@@ -32,7 +32,7 @@ const dislikeItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(404).json({ message: "Item not found" });
       }
-      res.status(400).json({ message: err.message });
+      return res.status(400).json({ message: err.message });
     });
 };
 

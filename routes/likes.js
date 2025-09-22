@@ -1,6 +1,6 @@
-const { likeItem, dislikeItem } = require("../controllers/likes");
-
 const router = require("express").Router();
+
+const { likeItem, dislikeItem } = require("../controllers/likes");
 
 router.put("/:itemId/likes", likeItem);
 
