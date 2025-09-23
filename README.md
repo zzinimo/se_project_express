@@ -1,3 +1,7 @@
+## Link to Google Drive
+
+https://drive.google.com/drive/folders/1otLyFuQRuqYMhV5RVlLfiXEy2clwaRK2?usp=sharing
+
 ## Technologies & Techniques Used
 
 ### Core Technologies
