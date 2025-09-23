@@ -36,23 +36,10 @@ const getItems = (req, res) => {
     .then((items) => {
       res.status(200).send(items);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(DEFAULT_ERROR).send({ message: "Error from getItems" });
     });
 };
-// Took out per reviewer request. Thank you
-
-// const updateItem = (req, res) => {
-//   const { itemId } = req.params;
-//   const { imageUrl } = req.body;
-
-//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-//     .orFail()
-//     .then((item) => res.status(200).send({ data: item }))
-//     .catch((err) => {
-//       res.status(500).send({ message: "Error from updateItem" });
-//     });
-// };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
