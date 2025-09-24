@@ -1,5 +1,11 @@
 const ClothingItem = require("../models/clothingItem");
 
+const {
+  VALIDATION_ERROR,
+  NOT_FOUND,
+  DEFAULT_ERROR,
+} = require("../utils/errors");
+
 const likeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
@@ -12,9 +18,9 @@ const likeItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).json({ message: "Item not found" });
+        return res.status(NOT_FOUND).json({ message: "Item not found" });
       }
-      return res.status(400).json({ message: err.message });
+      return res.status(VALIDATION_ERROR).json({ message: err.message });
     });
 };
 
@@ -30,9 +36,9 @@ const dislikeItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).json({ message: "Item not found" });
+        return res.status(NOT_FOUND).json({ message: "Item not found" });
       }
-      return res.status(400).json({ message: err.message });
+      return res.status(VALIDATION_ERROR).json({ message: err.message });
     });
 };
 
