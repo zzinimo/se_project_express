@@ -1,10 +1,6 @@
 const ClothingItem = require("../models/clothingItem");
 
-const {
-  VALIDATION_ERROR,
-  NOT_FOUND,
-  DEFAULT_ERROR,
-} = require("../utils/errors");
+const { VALIDATION_ERROR, NOT_FOUND } = require("../utils/errors");
 
 const likeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
