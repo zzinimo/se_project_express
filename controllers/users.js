@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const bcrypt = require("bcryptjs"); // importing bcrypt
+
 const {
   VALIDATION_ERROR,
   NOT_FOUND,
@@ -16,16 +18,36 @@ const getUsers = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, avatar } = req.body;
-  User.create({ name, avatar })
-    .then((user) => res.status(201).send(user))
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(VALIDATION_ERROR).send({ message: err.message });
-      }
-      return res.status(DEFAULT_ERROR).send({ message: "Error creating user" });
-    });
+  const { name, avatar, email, password } = req.body;
+  bcrypt.hash(password, 10).then((hash) => {
+    User.create({
+      name,
+      avatar,
+      email,
+      password: hash,
+    })
+      .then((user) => {
+        const userInfo = {
+          name: user.name,
+          avatar: user.avatar,
+          email: user.email,
+        };
+        res.status(201).send(userInfo);
+      })
+      .catch((err) => {
+        console.error("error zach is", err);
+        if (err.name === "ValidationError") {
+          return res.status(VALIDATION_ERROR).send({ message: err.message });
+        } else if (err.code === 11000) {
+          return res
+            .status(VALIDATION_ERROR)
+            .send({ message: "Email already exists" });
+        }
+        return res
+          .status(DEFAULT_ERROR)
+          .send({ message: "Error creating user" });
+      });
+  });
 };
 
 const getUser = (req, res) => {
