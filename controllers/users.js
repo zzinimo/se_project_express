@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs"); // importing bcrypt
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../utils/config");
 
 const {
   VALIDATION_ERROR,
@@ -35,7 +37,6 @@ const createUser = (req, res) => {
         res.status(201).send(userInfo);
       })
       .catch((err) => {
-        console.error("error zach is", err);
         if (err.name === "ValidationError") {
           return res.status(VALIDATION_ERROR).send({ message: err.message });
         } else if (err.code === 11000) {
@@ -50,8 +51,8 @@ const createUser = (req, res) => {
   });
 };
 
-const getUser = (req, res) => {
-  const { userId } = req.params;
+const getCurrentUser = (req, res) => {
+  const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(200).send(user))
@@ -65,8 +66,57 @@ const getUser = (req, res) => {
           .status(VALIDATION_ERROR)
           .send({ message: "Invalid user ID format" });
       }
-      return res.status(DEFAULT_ERROR).send({ message: "Error getting users" });
+      return res
+        .status(DEFAULT_ERROR)
+        .send({ message: "Error getting profile" });
     });
 };
 
-module.exports = { getUsers, createUser, getUser };
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      res.send({ token });
+    })
+    .catch((err) => {
+      console.error("Error is", err);
+      res.status(401).send({ message: err.message });
+    });
+};
+
+const updateProfile = (req, res) => {
+  const userId = req.user._id;
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    userId,
+    { $set: { name: name, avatar: avatar } },
+    { new: true, runValidators: true }
+  )
+    .orFail()
+    .then((user) => {
+      res.status(201).send(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "User not found" });
+      }
+      if (err.name === "ValidationError") {
+        return res.status(VALIDATION_ERROR).send({ message: err.message });
+      }
+      if (err.name === "CastError") {
+        return res
+          .status(VALIDATION_ERROR)
+          .send({ message: "Invalid user ID format" });
+      }
+      return res
+        .status(DEFAULT_ERROR)
+        .send({ message: "Error updating profile" });
+    });
+};
+module.exports = { getUsers, createUser, getCurrentUser, login, updateProfile };

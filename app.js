@@ -9,13 +9,6 @@ app.use(express.json());
 
 const mainRouter = require("./routes/index");
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "68ccbd974321679185339454", // paste the _id of the test user created in the previous step Alice first in collection
-  };
-  next();
-});
-
 app.use("/", mainRouter);
 
 mongoose
