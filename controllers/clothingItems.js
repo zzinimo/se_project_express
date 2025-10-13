@@ -43,23 +43,33 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+  const owner = req.user._id;
 
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
-    .then((item) => {
-      res.status(200).json({ data: item });
+    .then((clothingItem) => {
+      if (clothingItem.owner.equals(owner)) {
+        return clothingItem.deleteOne();
+      } else {
+        return Promise.reject(new Error("Access denied"));
+      }
+    })
+    .then(() => {
+      res.status(200).send({ message: "Item deleted successfully" });
     })
     .catch((err) => {
+      if (err.message === "Access denied") {
+        return res.status(403).send({ message: "Access denied" });
+      }
       if (err.name === "CastError") {
-        // Invalid ObjectId format
         return res
           .status(VALIDATION_ERROR)
-          .json({ message: "Invalid item ID" });
+          .send({ message: "Invalid item ID" });
       }
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).json({ message: "Item not found" });
+        return res.status(NOT_FOUND).send({ message: "Item not found" });
       }
-      return res.status(DEFAULT_ERROR).json({ message: "Error deleting item" });
+      return res.status(DEFAULT_ERROR).send({ message: "Error deleting item" });
     });
 };
 
