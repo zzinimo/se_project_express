@@ -40,9 +40,7 @@ const createUser = (req, res) => {
         if (err.name === "ValidationError") {
           return res.status(VALIDATION_ERROR).send({ message: err.message });
         } else if (err.code === 11000) {
-          return res
-            .status(VALIDATION_ERROR)
-            .send({ message: "Email already exists" });
+          return res.status(409).send({ message: "Email already exists" });
         }
         return res
           .status(DEFAULT_ERROR)
@@ -84,7 +82,7 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error("Error is", err);
-      res.status(401).send({ message: err.message });
+      res.status(400).send({ message: err.message });
     });
 };
 
@@ -99,7 +97,7 @@ const updateProfile = (req, res) => {
   )
     .orFail()
     .then((user) => {
-      res.status(201).send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
       console.error(err);
