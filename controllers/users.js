@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs"); // importing bcrypt
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-
 const {
   VALIDATION_ERROR,
   NOT_FOUND,
