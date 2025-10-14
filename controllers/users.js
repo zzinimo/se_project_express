@@ -1,6 +1,6 @@
-const User = require("../models/user");
 const bcrypt = require("bcryptjs"); // importing bcrypt
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
 
 const {
@@ -39,7 +39,8 @@ const createUser = (req, res) => {
       .catch((err) => {
         if (err.name === "ValidationError") {
           return res.status(VALIDATION_ERROR).send({ message: err.message });
-        } else if (err.code === 11000) {
+        }
+        if (err.code === 11000) {
           return res.status(409).send({ message: "Email already exists" });
         }
         return res
@@ -92,7 +93,7 @@ const updateProfile = (req, res) => {
 
   User.findByIdAndUpdate(
     userId,
-    { $set: { name: name, avatar: avatar } },
+    { $set: { name, avatar } },
     { new: true, runValidators: true }
   )
     .orFail()

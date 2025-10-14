@@ -50,9 +50,8 @@ const deleteItem = (req, res) => {
     .then((clothingItem) => {
       if (clothingItem.owner.equals(owner)) {
         return clothingItem.deleteOne();
-      } else {
-        return Promise.reject(new Error("Access denied"));
       }
+      return Promise.reject(new Error("Access denied"));
     })
     .then(() => {
       res.status(200).send({ message: "Item deleted successfully" });
