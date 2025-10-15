@@ -2,6 +2,10 @@
 
 https://drive.google.com/drive/folders/1otLyFuQRuqYMhV5RVlLfiXEy2clwaRK2?usp=sharing
 
+## Link to Google Drive Pitch Videos
+
+https://drive.google.com/drive/folders/1Y_itJraYgezyycCyQY0S1kvJN9lkbBnl?usp=drive_link
+
 ## Technologies & Techniques Used
 
 ### Core Technologies
