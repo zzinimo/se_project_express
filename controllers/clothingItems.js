@@ -4,6 +4,7 @@ const {
   VALIDATION_ERROR,
   NOT_FOUND,
   DEFAULT_ERROR,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -34,7 +35,7 @@ const createItem = (req, res) => {
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => {
-      res.status(200).send(items);
+      res.status(200).json(items);
     })
     .catch(() => {
       res.status(DEFAULT_ERROR).send({ message: "Error from getItems" });
@@ -58,7 +59,7 @@ const deleteItem = (req, res) => {
     })
     .catch((err) => {
       if (err.message === "Access denied") {
-        return res.status(403).send({ message: "Access denied" });
+        return res.status(FORBIDDEN).json({ message: "Access denied" });
       }
       if (err.name === "CastError") {
         return res

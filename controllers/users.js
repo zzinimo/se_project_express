@@ -6,17 +6,8 @@ const {
   VALIDATION_ERROR,
   NOT_FOUND,
   DEFAULT_ERROR,
+  CONFLICT,
 } = require("../utils/errors");
-
-// GET /users
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res.status(DEFAULT_ERROR).send({ message: "Error getting users" });
-    });
-};
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -40,7 +31,7 @@ const createUser = (req, res) => {
           return res.status(VALIDATION_ERROR).send({ message: err.message });
         }
         if (err.code === 11000) {
-          return res.status(409).send({ message: "Email already exists" });
+          return res.status(CONFLICT).send({ message: "Email already exists" });
         }
         return res
           .status(DEFAULT_ERROR)
@@ -82,7 +73,7 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error("Error is", err);
-      res.status(400).send({ message: err.message });
+      res.status(401).send({ message: err.message });
     });
 };
 
@@ -117,4 +108,4 @@ const updateProfile = (req, res) => {
         .send({ message: "Error updating profile" });
     });
 };
-module.exports = { getUsers, createUser, getCurrentUser, login, updateProfile };
+module.exports = { createUser, getCurrentUser, login, updateProfile };

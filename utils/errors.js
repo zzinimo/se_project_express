@@ -4,8 +4,11 @@ const NOT_FOUND = 404;
 
 const DEFAULT_ERROR = 500;
 
+const FORBIDDEN = 403;
+
 module.exports = {
   VALIDATION_ERROR,
   NOT_FOUND,
   DEFAULT_ERROR,
+  FORBIDDEN,
 };

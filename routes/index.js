@@ -1,7 +1,8 @@
 const router = require("express").Router();
+const { getItems } = require("../controllers/clothingItems");
 
 // Routers
-const clothingItem = require("./clothingItems");
+const clothingItemsRouter = require("./clothingItems");
 const userRouter = require("./users");
 const likesRouter = require("./likes");
 
@@ -14,7 +15,10 @@ const { login, createUser } = require("../controllers/users");
 // Errors
 const { NOT_FOUND } = require("../utils/errors");
 
-router.use("/items", auth, clothingItem);
+// public GET route
+router.get("/items", getItems);
+
+router.use("/items", auth, clothingItemsRouter);
 router.use("/items", auth, likesRouter);
 router.use("/users", auth, userRouter);
 
