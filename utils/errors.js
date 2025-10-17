@@ -6,9 +6,12 @@ const DEFAULT_ERROR = 500;
 
 const FORBIDDEN = 403;
 
+const CONFLICT = 409;
+
 module.exports = {
   VALIDATION_ERROR,
   NOT_FOUND,
   DEFAULT_ERROR,
   FORBIDDEN,
+  CONFLICT,
 };
