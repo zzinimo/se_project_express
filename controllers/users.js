@@ -64,6 +64,21 @@ const getCurrentUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
+  if (!email) {
+    return res.status(400).send({ message: "Email is required" });
+  }
+
+  if (!password) {
+    return res.status(400).send({ message: "Password is required" });
+  }
+
+  // Validate field types
+  if (typeof email !== "string" || typeof password !== "string") {
+    return res
+      .status(400)
+      .send({ message: "Email and password must be strings" });
+  }
+
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -72,8 +87,9 @@ const login = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      console.error("Error is", err);
-      res.status(401).send({ message: err.message });
+      console.error("Authentication error:", err);
+      // This should only be 401 for actual auth failures (wrong email/password)
+      res.status(401).send({ message: "Incorrect email or password" });
     });
 };
 
