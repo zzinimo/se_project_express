@@ -1,4 +1,4 @@
-const JWT_SECRET = "this_is_my_secret_key_sprint_13";
+const { JWT_SECRET = "super-strong-secret" } = process.env;
 
 module.exports = {
   JWT_SECRET,

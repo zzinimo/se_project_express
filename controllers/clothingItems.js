@@ -7,7 +7,7 @@ const {
   FORBIDDEN,
 } = require("../utils/errors");
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
 
@@ -20,16 +20,7 @@ const createItem = (req, res) => {
     .then((item) => {
       res.status(201).send(item);
     })
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        // Return 400 for validation errors
-        return res.status(VALIDATION_ERROR).send({ message: err.message });
-      }
-      console.error("Error creating item:", err);
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "An error has occured on the server" });
-    });
+    .catch(next);
 };
 
 const getItems = (req, res) => {
@@ -42,7 +33,7 @@ const getItems = (req, res) => {
     });
 };
 
-const deleteItem = (req, res) => {
+const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
   const owner = req.user._id;
 
@@ -57,20 +48,7 @@ const deleteItem = (req, res) => {
     .then(() => {
       res.status(200).send({ message: "Item deleted successfully" });
     })
-    .catch((err) => {
-      if (err.message === "Access denied") {
-        return res.status(FORBIDDEN).json({ message: "Access denied" });
-      }
-      if (err.name === "CastError") {
-        return res
-          .status(VALIDATION_ERROR)
-          .send({ message: "Invalid item ID" });
-      }
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "Item not found" });
-      }
-      return res.status(DEFAULT_ERROR).send({ message: "Error deleting item" });
-    });
+    .catch(next);
 };
 
 module.exports = {

@@ -2,7 +2,7 @@ const ClothingItem = require("../models/clothingItem");
 
 const { VALIDATION_ERROR, NOT_FOUND } = require("../utils/errors");
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
@@ -12,15 +12,10 @@ const likeItem = (req, res) => {
     .then((item) => {
       res.status(200).json({ data: item });
     })
-    .catch((err) => {
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).json({ message: "Item not found" });
-      }
-      return res.status(VALIDATION_ERROR).json({ message: err.message });
-    });
+    .catch(next);
 };
 
-const dislikeItem = (req, res) => {
+const dislikeItem = (req, res, next) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } }, // remove the user's like
@@ -30,12 +25,7 @@ const dislikeItem = (req, res) => {
     .then((item) => {
       res.status(200).json({ data: item });
     })
-    .catch((err) => {
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).json({ message: "Item not found" });
-      }
-      return res.status(VALIDATION_ERROR).json({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports = { likeItem, dislikeItem };

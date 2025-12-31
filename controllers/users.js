@@ -9,7 +9,7 @@ const {
   CONFLICT,
 } = require("../utils/errors");
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     User.create({
@@ -26,39 +26,16 @@ const createUser = (req, res) => {
         };
         res.status(201).send(userInfo);
       })
-      .catch((err) => {
-        if (err.name === "ValidationError") {
-          return res.status(VALIDATION_ERROR).send({ message: err.message });
-        }
-        if (err.code === 11000) {
-          return res.status(CONFLICT).send({ message: "Email already exists" });
-        }
-        return res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Error creating user" });
-      });
+      .catch(next);
   });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "User not found" });
-      }
-      if (err.name === "CastError") {
-        return res
-          .status(VALIDATION_ERROR)
-          .send({ message: "Invalid user ID format" });
-      }
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "Error getting profile" });
-    });
+    .catch(next);
 };
 
 const login = (req, res) => {
@@ -93,7 +70,7 @@ const login = (req, res) => {
     });
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const userId = req.user._id;
   const { name, avatar } = req.body;
 
@@ -106,22 +83,6 @@ const updateProfile = (req, res) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "User not found" });
-      }
-      if (err.name === "ValidationError") {
-        return res.status(VALIDATION_ERROR).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
-        return res
-          .status(VALIDATION_ERROR)
-          .send({ message: "Invalid user ID format" });
-      }
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "Error updating profile" });
-    });
+    .catch(next);
 };
 module.exports = { createUser, getCurrentUser, login, updateProfile };
