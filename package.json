@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/zzinimo/se_project_express/issues"
   },
-  "homepage": "https://github.com/zzinimo/se_project_express#readme",
+  "homepage": "https://midjava.com",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "celebrate": "^15.0.3",

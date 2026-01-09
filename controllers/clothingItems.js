@@ -1,5 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
 
+const { ForbiddenError } = require("../utils/ForbiddenError");
+const { NotFoundError } = require("../utils/NotFoundError");
+
 const {
   VALIDATION_ERROR,
   NOT_FOUND,
@@ -23,14 +26,12 @@ const createItem = (req, res, next) => {
     .catch(next);
 };
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => {
       res.status(200).json(items);
     })
-    .catch(() => {
-      res.status(DEFAULT_ERROR).send({ message: "Error from getItems" });
-    });
+    .catch(next);
 };
 
 const deleteItem = (req, res, next) => {
@@ -38,12 +39,12 @@ const deleteItem = (req, res, next) => {
   const owner = req.user._id;
 
   ClothingItem.findById(itemId)
-    .orFail()
+    .orFail(new NotFoundError("Item not found"))
     .then((clothingItem) => {
       if (clothingItem.owner.equals(owner)) {
         return clothingItem.deleteOne();
       }
-      return Promise.reject(new Error("Access denied"));
+      return Promise.reject(new ForbiddenError("Access denied"));
     })
     .then(() => {
       res.status(200).send({ message: "Item deleted successfully" });

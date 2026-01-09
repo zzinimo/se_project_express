@@ -8,6 +8,7 @@ const {
   DEFAULT_ERROR,
   CONFLICT,
 } = require("../utils/errors");
+const { NotFoundError } = require("../utils/NotFoundError");
 
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -33,7 +34,7 @@ const createUser = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
-    .orFail()
+    .orFail(new NotFoundError("Current user not found"))
     .then((user) => res.status(200).send(user))
     .catch(next);
 };
@@ -79,7 +80,7 @@ const updateProfile = (req, res, next) => {
     { $set: { name, avatar } },
     { new: true, runValidators: true }
   )
-    .orFail()
+    .orFail(new NotFoundError("User not found"))
     .then((user) => {
       res.status(200).send(user);
     })

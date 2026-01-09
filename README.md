@@ -1,3 +1,9 @@
+## Deployed Application
+
+**Domain:** https://api.wtwr.midjava.com
+
+**Frontend Repository:** https://github.com/zzinimo/se_project_react
+
 ## Link to Google Drive
 
 https://drive.google.com/drive/folders/1otLyFuQRuqYMhV5RVlLfiXEy2clwaRK2?usp=sharing
