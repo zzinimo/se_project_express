@@ -8,11 +8,17 @@ const app = express();
 
 const mongoose = require("mongoose");
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3002 } = process.env;
 const cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
+
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
 
 const mainRouter = require("./routes/index");
 
