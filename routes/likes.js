@@ -4,8 +4,8 @@ const { validateId } = require("../middlewares/validator");
 
 const { likeItem, dislikeItem } = require("../controllers/likes");
 
-router.put("/:itemId/likes", auth, validateId, likeItem);
+router.put("/:itemId/likes", validateId, likeItem);
 
-router.delete("/:itemId/likes", auth, validateId, dislikeItem);
+router.delete("/:itemId/likes", validateId, dislikeItem);
 
 module.exports = router;
