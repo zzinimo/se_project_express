@@ -4,13 +4,10 @@
 
 **Frontend Repository:** https://github.com/zzinimo/se_project_react
 
-## Link to Google Drive
-
-https://drive.google.com/drive/folders/1otLyFuQRuqYMhV5RVlLfiXEy2clwaRK2?usp=sharing
-
-## Link to Google Drive Pitch Videos
-
-https://drive.google.com/drive/folders/1Y_itJraYgezyycCyQY0S1kvJN9lkbBnl?usp=drive_link
+ ## Project Pitch Video
+ 
+ Check out [this video](https://drive.google.com/file/d/17SWPivXkFAtLKjqAxcQZiESrrHNQSXRt/view?usp=drive_link), where I describe my 
+ project and some challenges I faced while building it.
 
 ## Technologies & Techniques Used
 

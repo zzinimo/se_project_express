@@ -2,13 +2,10 @@ const bcrypt = require("bcryptjs"); // importing bcrypt
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-const {
-  VALIDATION_ERROR,
-  NOT_FOUND,
-  DEFAULT_ERROR,
-  CONFLICT,
-} = require("../utils/errors");
-const { NotFoundError } = require("../utils/NotFoundError");
+const NotFoundError = require("../utils/NotFoundError");
+const ConflictError = require("../utils/ConflictError");
+const BadRequestError = require("../utils/BadRequestError");
+const UnauthorizedError = require("../utils/UnauthorizedError");
 
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -27,7 +24,13 @@ const createUser = (req, res, next) => {
         };
         res.status(201).send(userInfo);
       })
-      .catch(next);
+      .catch((err) => {
+        if (err.code === 11000) {
+          next(new ConflictError("Email already exists"));
+        } else {
+          next(err);
+        }
+      });
   });
 };
 
@@ -39,22 +42,20 @@ const getCurrentUser = (req, res, next) => {
     .catch(next);
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email) {
-    return res.status(400).send({ message: "Email is required" });
+    return next(new BadRequestError("Email is required"));
   }
 
   if (!password) {
-    return res.status(400).send({ message: "Password is required" });
+    return next(new BadRequestError("Password is required"));
   }
 
   // Validate field types
   if (typeof email !== "string" || typeof password !== "string") {
-    return res
-      .status(400)
-      .send({ message: "Email and password must be strings" });
+    return next(new BadRequestError("Email and password must be strings"));
   }
 
   return User.findUserByCredentials(email, password)
@@ -65,9 +66,11 @@ const login = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      console.error("Authentication error:", err);
-      // This should only be 401 for actual auth failures (wrong email/password)
-      res.status(401).send({ message: "Incorrect email or password" });
+      if (err.message === "Incorrect email or password") {
+        next(new UnauthorizedError("Incorrect email or password"));
+      } else {
+        next(err);
+      }
     });
 };
 
