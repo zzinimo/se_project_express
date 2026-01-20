@@ -4,10 +4,10 @@
 
 **Frontend Repository:** https://github.com/zzinimo/se_project_react
 
- ## Project Pitch Video
- 
- Check out [this video](https://drive.google.com/file/d/17SWPivXkFAtLKjqAxcQZiESrrHNQSXRt/view?usp=drive_link), where I describe my 
- project and some challenges I faced while building it.
+## Project Pitch Video
+
+Check out [this video](https://drive.google.com/file/d/17SWPivXkFAtLKjqAxcQZiESrrHNQSXRt/view?usp=drive_link), where I describe my
+project and some challenges I faced while building it.
 
 ## Technologies & Techniques Used
 
